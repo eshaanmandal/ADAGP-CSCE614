@@ -1,9 +1,10 @@
 import torch
+from tqdm import tqdm
 
 def train_baseline(model, dataloader, optimizer, criterion, device, scheduler=None):
     model.train()
     running_loss = 0.0
-    for data, labels in dataloader:
+    for data, labels in tqdm(dataloader):
         data, labels = data.to(device), labels.to(device)
         optimizer.zero_grad()
         outputs = model(data)

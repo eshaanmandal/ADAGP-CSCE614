@@ -2,7 +2,8 @@ import torch
 class Config:
     # General settings
     seed = 42  # Random seed for reproducibility
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    #device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda"
 
     # Data parameters
     data_dir = "./data"  # Directory for storing data
@@ -13,8 +14,8 @@ class Config:
     pretrained = False  # Whether to use a pretrained model
 
     # Training parameters
-    num_epochs = 20  # Number of training epochs
-    learning_rate = 0.01  # Learning rate for optimizer
+    num_epochs = 100  # Number of training epochs
+    lr = 0.001  # Learning rate for optimizer
     weight_decay = 1e-4  # Weight decay (L2 regularization)
     mode='min'
     factor=0.1
@@ -24,7 +25,7 @@ class Config:
     # Checkpoint parameters
     checkpoint_dir = "./checkpoints"  # Directory to save model checkpoints
     save_freq = 1  # Frequency (in epochs) to save checkpoints
-    use_checkpoint=False
+    use_checkpoint=True
     
     # Logging parameters
     log_freq = 10  # Frequency of logging during training
