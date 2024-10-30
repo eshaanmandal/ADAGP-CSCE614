@@ -1,7 +1,8 @@
 import torch
 from tqdm import tqdm
+from validate import validate_baseline
 
-def train_baseline(model, dataloader, optimizer, criterion, device, scheduler=None):
+def train_baseline(model, dataloader, val_loader, optimizer, criterion, device, scheduler=None):
     model.train()
     running_loss = 0.0
     for data, labels in tqdm(dataloader):
@@ -13,6 +14,7 @@ def train_baseline(model, dataloader, optimizer, criterion, device, scheduler=No
         optimizer.step()
         running_loss += loss.item()
         avg_training_loss = running_loss / len(dataloader)
+        val_loss, val_accuracy = validate_baseline(model, val_loader, criterion, device)
         if scheduler is not None:
-            scheduler.step(avg_training_loss)
-    return avg_training_loss
+            scheduler.step(val_loss)
+    return avg_training_loss, val_loss, val_accuracy

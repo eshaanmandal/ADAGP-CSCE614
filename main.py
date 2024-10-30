@@ -41,23 +41,27 @@ def main():
     if config.use_checkpoint:
         s_epoch, _ = load_checkpoint(model, optimizer,file_path=f'./checkpoints/resnet50_epoch_29.pth', scheduler=scheduler)
     # Load data
-    train_loader, val_loader = get_dataloader(batch_size=config.batch_size)
+    train_loader, val_loader, test_loader = get_dataloader(batch_size=config.batch_size)
 
     # Run training and validation loops
     for epoch in range(config.num_epochs):
         print(f"Epoch {epoch+s_epoch+1}/{config.num_epochs}")
 
         # Training
-        train_loss = train_baseline(model, train_loader, optimizer, criterion, device)
+        train_loss, val_loss, val_accuracy = train_baseline(model, train_loader, val_loader, optimizer, criterion, device)
 
-        # Validation
-        val_loss, val_accuracy = validate_baseline(model, val_loader, criterion, device)
+        # # Validation
+        # val_loss, val_accuracy = validate_baseline(model, val_loader, criterion, device)
 
         # Print epoch summary
         print(f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, Val Accuracy: {val_accuracy*100}%")
 
         # Optional: Save checkpoint
-        save_checkpoint(model, optimizer, epoch, val_loss, file_path=f'./checkpoints/{config.model_name}_epoch_{epoch}.pth', scheduler=scheduler)
+        save_checkpoint(model, optimizer, epoch, val_loss, file_path=f'./checkpoints/{config.model_name}_epoch_{epoch+s_epoch+1}.pth', scheduler=scheduler)
+
+    print("checking the accuracy on test set")
+    test_loss, test_accuracy = validate_baseline(model, test_loader, criterion, device)
+    print(f"Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy*100}%")
 
 if __name__ == "__main__":
     main()
