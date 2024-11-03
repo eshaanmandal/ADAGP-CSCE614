@@ -1,6 +1,6 @@
 import torch
 from tqdm import tqdm
-from validate import validate_baseline
+from .validate import validate_baseline
 
 def train_baseline(model, dataloader, val_loader, optimizer, criterion, device, scheduler=None):
     model.train()
